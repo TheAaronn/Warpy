@@ -1,0 +1,10 @@
+/.vs
+/Logs
+/Library
+/obj
+/Packages
+/ProjectSettings
+/UserSettings
+.vsconfig
+Assembly-CSharp.csproj
+Plata.sln
