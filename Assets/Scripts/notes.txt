@@ -1,0 +1,6 @@
+Agrandar escenario (Parallax?)
+Límites de cámara y respawn bugs cuando la cámara lo siga (onBecameInvisible)
+Enemigos
+UI fija en la cámara
+Sistema de vidas
+Monedas?

@@ -1,10 +1,11 @@
 using UnityEditor;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour {
+public class PlayerScript : MonoBehaviour {
     public float speed = 5f;
     public float maxSpeed = 5f;
     public float jumpSpeed= 20f;
+    public bool grounded = true;
     private Rigidbody2D body;
     private Animator anim;
 
@@ -13,7 +14,11 @@ public class NewBehaviourScript : MonoBehaviour {
         anim = GetComponent<Animator>();
     }
     private void Update(){
-        //body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
+        if (Input.GetKey(KeyCode.Space) && grounded){
+            Jump();
+        }
+        // Variables for jump animation
+        anim.SetBool("grounded", grounded);
     }
     private void FixedUpdate(){
         float h = Input.GetAxis("Horizontal");
@@ -24,9 +29,6 @@ public class NewBehaviourScript : MonoBehaviour {
         if(body.velocity.x < -maxSpeed){
             body.velocity = new Vector2(-maxSpeed, body.velocity.y);
         }
-        if (Input.GetKey(KeyCode.Space)){
-            body.velocity = new Vector2(body.velocity.x, jumpSpeed);
-        }
         // Flip
         if (h > 0.01f){
             transform.localScale = Vector3.one;
@@ -35,6 +37,25 @@ public class NewBehaviourScript : MonoBehaviour {
             transform.localScale = new Vector3(-1,1,1);
         }
 
-        anim.SetBool("Run", h != 0);
+        anim.SetBool("run", h != 0);
+    }
+    void Jump(){
+        body.velocity = new Vector2(body.velocity.x, jumpSpeed);
+        anim.SetTrigger("jump");
+        grounded = false;
+    }
+    void OnBecameInvisible() {
+        transform.position = new Vector3(-3, 0, 0);
+    }
+    void OnCollisionEnter2D(Collision2D col){
+        if(col.gameObject.tag == "Floor"){
+            grounded = true;
+        }
+    }
+    void OnCollisionExit2D(Collision2D col){
+        if (col.gameObject.tag == "Floor"){
+            grounded = false;
+        }
     }
 }
+
