@@ -3,26 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class CameraMovement : MonoBehaviour {
-    [SerializeField]private Vector3 offset;
-    [SerializeField]private float damping;
-
-    public Transform target;
-
-    private Vector3 vel = Vector3.zero;
-
-    private void FixedUpdate() {
-        Vector3 targetPosition = target.position + offset;
-        targetPosition.z = transform.position.z;
-
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref vel, damping);
-    }
-
-}
-
-/* Camarena's:
 public class CameraFollow : MonoBehaviour {
-
     public GameObject follow;
     public Vector2 minCamPos, maxCamPos;
     public float smoothTime;
@@ -38,4 +19,4 @@ public class CameraFollow : MonoBehaviour {
             Mathf.Clamp(posY, minCamPos.y, maxCamPos.y),
             transform.position.z);
     }
-} */
+}

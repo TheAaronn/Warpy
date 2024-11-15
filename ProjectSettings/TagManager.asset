@@ -5,14 +5,15 @@ TagManager:
   serializedVersion: 2
   tags:
   - Floor
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Background overlay
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -41,6 +42,9 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 221849479
+    locked: 0
+  - name: Background overlay
+    uniqueID: 2410150391
     locked: 0
   - name: Default
     uniqueID: 0

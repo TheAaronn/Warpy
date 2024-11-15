@@ -45,11 +45,19 @@ public class PlayerScript : MonoBehaviour {
         grounded = false;
     }
     void OnBecameInvisible() {
-        transform.position = new Vector3(-3, 0, 0);
+        transform.position = new Vector3(-5, -3, 0);
     }
     void OnCollisionEnter2D(Collision2D col){
-        if(col.gameObject.tag == "Floor"){
+        if(col.gameObject.tag == "Floor")
+        {
             grounded = true;
+        }
+        else if(col.gameObject.tag == "Enemy")
+        {
+            grounded = true;
+            transform.position = new Vector3(-5, -3, 0);
+            body.velocity = new Vector2(0, 0);
+            Debug.Log("Vida menos");
         }
     }
     void OnCollisionExit2D(Collision2D col){
