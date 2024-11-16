@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Floor
   - Enemy
+  - PlayerFeet
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - Background overlay
   - Water
   - UI
-  - Enemy
   - 
+  - Background
   - 
   - 
   - 
