@@ -7,7 +7,6 @@ public class MovingPlatform : MonoBehaviour
     public Transform target;
     public float speed = 10;
     private Vector3 posA, posB;
-    public Transform playerOriginalParent;
 
     void Start()
     {
@@ -34,17 +33,17 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("PlayerFeet"))
+        if (collision.CompareTag("Player"))
         {
-            collision.transform.parent.parent = this.transform;
+            collision.transform.parent= this.transform;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("PlayerFeet"))
+        if (collision.CompareTag("Player"))
         {
-            collision.transform.parent.parent = playerOriginalParent;
+            collision.transform.parent = null;
         }
     }
 }

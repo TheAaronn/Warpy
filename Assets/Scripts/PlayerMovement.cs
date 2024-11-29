@@ -1,5 +1,7 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerScript : MonoBehaviour {
     public float speed = 5f;
@@ -9,12 +11,20 @@ public class PlayerScript : MonoBehaviour {
     private Rigidbody2D body;
     private Animator anim;
 
+    public LifesCounter lifesCounter;
+    AudioManager audioManager;
+
+    private void Awake() {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     private void Start(){
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
     private void Update(){
         if (Input.GetKey(KeyCode.Space) && grounded){
+            audioManager.PlaySFX(audioManager.jump);
             Jump();
         }
         // Variables for jump animation
@@ -39,25 +49,48 @@ public class PlayerScript : MonoBehaviour {
 
         anim.SetBool("run", h != 0);
     }
+    void OnEnable() {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    void OnDisable() {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode){
+        if (scene.name == "Level 2"){
+            MoveToSpawnPoint();
+        }
+    }
     void Jump(){
         body.velocity = new Vector2(body.velocity.x, jumpSpeed);
         anim.SetTrigger("jump");
         grounded = false;
     }
+    private void MoveToSpawnPoint() {
+        GameObject spawnPoint = GameObject.FindGameObjectWithTag("Respawn");
+        if (spawnPoint != null) {
+            transform.position = spawnPoint.transform.position;
+        }
+    }
     void OnBecameInvisible() {
-        transform.position = new Vector3(-5, -3, 0);
+        lifesCounter.LoseLife();
+        MoveToSpawnPoint();
     }
     void OnCollisionEnter2D(Collision2D col){
         if(col.gameObject.tag == "Floor")
         {
             grounded = true;
         }
-        else if(col.gameObject.tag == "Enemy")
-        {
+        else if(col.gameObject.tag == "Enemy"){
             grounded = true;
-            transform.position = new Vector3(-5, -3, 0);
-            body.velocity = new Vector2(0, 0);
-            Debug.Log("Vida menos");
+            lifesCounter.LoseLife();
+            audioManager.PlaySFX(audioManager.death);
+            MoveToSpawnPoint();
+        }else if(col.gameObject.tag == "Water") {
+            lifesCounter.LoseLife();
+            audioManager.PlaySFX(audioManager.death);
+            MoveToSpawnPoint();
+        }else if(col.gameObject.CompareTag("Goal")){
+            GameManager.Instance.Victory();
         }
     }
     void OnCollisionExit2D(Collision2D col){
